@@ -5,4 +5,4 @@ sample for RecyclerView
 <img src="capture.gif" width=320 />
 
 ## for Java
-xxx
+https://github.com/LeoAndo/SimpleRecyclerViewJava
