@@ -1,0 +1,2 @@
+# SimpleRecyclerViewKotlin
+sample for RecyclerView
