@@ -44,6 +44,13 @@ class MyAdapter(val items: MutableList<Item>, private val onItemClick: (Int) -> 
         notifyItemRemoved(index)
     }
 
+    fun updateItem(position: Int) {
+        items[position].apply {
+            this.title = "update: ${this.title}"
+        }
+        notifyItemChanged(position)
+    }
+
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val imageView = itemView.findViewById<ImageView>(R.id.image_view)!!
         val textTitle = itemView.findViewById<TextView>(R.id.text_title)!!

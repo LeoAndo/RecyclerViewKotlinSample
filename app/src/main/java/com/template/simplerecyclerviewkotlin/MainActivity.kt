@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
 
         adapter = MyAdapter(generateDummyItems(10).toMutableList()) { position ->
             showToast("$position Item Clicked!!")
-            updateItem(position)
+            adapter.updateItem(position)
         }
 
         val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
@@ -46,13 +46,6 @@ class MainActivity : AppCompatActivity() {
         val totalPriceStr = format.format(totalPrice)
         val textTotalPrice = findViewById<TextView>(R.id.total_price)
         textTotalPrice?.text = totalPriceStr
-    }
-
-    private fun updateItem(position: Int) {
-        adapter.items[position].apply {
-            this.title = "update: ${this.title}"
-        }
-        adapter.notifyItemChanged(position)
     }
 
     fun insertItem(view: View) {
