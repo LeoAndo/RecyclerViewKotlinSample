@@ -13,8 +13,6 @@ import java.util.*
 import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
-    private val items: ArrayList<Item> = arrayListOf()
-    private var adapter: MyAdapter? = null
     private val resources =
         listOf(
             OrderItem(R.drawable.ic_emoji_food_beverage, "beverage", 1000, 1),
@@ -22,28 +20,28 @@ class MainActivity : AppCompatActivity() {
             OrderItem(R.drawable.ic_fastfood, "fastFood", 1000, 5),
             OrderItem(R.drawable.ic_food_bank, "foodBank", 1000, 10)
         )
+    private lateinit var adapter: MyAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
-        recyclerView.apply {
-            this.setHasFixedSize(false)
-            this.layoutManager = LinearLayoutManager(this@MainActivity)
-        }
-        generateDummyItems(10)
-        adapter = MyAdapter(items) { position ->
+        adapter = MyAdapter(generateDummyItems(10).toMutableList()) { position ->
             showToast("$position Item Clicked!!")
             updateItem(position)
-        }.also {
-            recyclerView.adapter = it
+        }
+
+        val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
+        recyclerView.also {
+            it.setHasFixedSize(false)
+            it.layoutManager = LinearLayoutManager(this@MainActivity)
+            it.adapter = this@MainActivity.adapter
         }
         displayTotalPrice()
     }
 
     private fun displayTotalPrice() {
-        val totalPrice = items.sumBy { it.price * it.amount }
+        val totalPrice = adapter.totalPrice
         val format = NumberFormat.getCurrencyInstance()
         val totalPriceStr = format.format(totalPrice)
         val textTotalPrice = findViewById<TextView>(R.id.total_price)
@@ -51,13 +49,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateItem(position: Int) {
-        val updateItem = items[position]
-        updateItem.title = "update: ${updateItem.title}"
-        adapter?.notifyItemChanged(position)
+        adapter.items[position].apply {
+            this.title = "update: ${this.title}"
+        }
+        adapter.notifyItemChanged(position)
     }
 
     fun insertItem(view: View) {
-        val until = if (items.size == 0) 1 else items.size
+        val until = if (adapter.items.size == 0) 1 else adapter.items.size
         val index = Random.nextInt(until)
         val resIndex = Random.nextInt(resources.size)
         val newItem = Item(
@@ -66,21 +65,18 @@ class MainActivity : AppCompatActivity() {
             resources[resIndex].price,
             resources[resIndex].amount
         )
-        items.add(index, newItem)
-        adapter?.notifyItemInserted(index) // 変更がある箇所だけ差分更新する.
-        // adapter?.notifyDataSetChanged() // これだとリスト全体の更新が走る.
+        adapter.insertItem(index, newItem)
         displayTotalPrice()
         Log.d("aaa", "title: ${resources[resIndex].title} : index: $index")
     }
 
     fun removeItem(view: View) {
-        if (items.size == 0) {
+        if (adapter.items.size == 0) {
             showToast("list is empty and cannot be deleted.")
             return
         }
-        val index = Random.nextInt(items.size)
-        items.removeAt(index)
-        adapter?.notifyItemRemoved(index)
+        val index = Random.nextInt(adapter.items.size)
+        adapter.removeItem(index)
         displayTotalPrice()
         Log.d("aaa", "index: $index")
     }
@@ -89,8 +85,8 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
-    private fun generateDummyItems(size: Int) {
-
+    private fun generateDummyItems(size: Int): List<Item> {
+        val items: ArrayList<Item> = arrayListOf()
         for (i in 0 until size) {
             val resIndex = Random.nextInt(resources.size)
             items.add(
@@ -102,7 +98,6 @@ class MainActivity : AppCompatActivity() {
                 )
             )
         }
+        return items
     }
-
-
 }
