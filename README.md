@@ -1,4 +1,4 @@
-# SimpleRecyclerViewKotlin
+# RecyclerViewKotlinSample
 sample for RecyclerView
 
 ## capture
