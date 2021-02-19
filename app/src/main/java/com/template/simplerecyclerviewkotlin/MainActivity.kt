@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
 
         val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
         recyclerView.also {
-            it.setHasFixedSize(false)
+            it.setHasFixedSize(true)
             it.layoutManager = LinearLayoutManager(this@MainActivity)
             it.adapter = this@MainActivity.adapter
         }
