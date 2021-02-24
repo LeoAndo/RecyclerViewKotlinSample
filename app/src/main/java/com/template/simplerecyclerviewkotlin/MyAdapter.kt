@@ -9,7 +9,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class MyAdapter(val items: MutableList<Item>, private val onItemClick: (Int) -> Unit) :
+typealias OnItemClickListener<T> = (T) -> Unit
+
+class MyAdapter(
+    val items: MutableList<Item>,
+    private val onItemClick: OnItemClickListener<Int>,
+    private val onItemLongClick: OnItemClickListener<String>
+) :
     RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
 
     val totalPrice get() = items.sumBy { it.price * it.amount }
@@ -62,6 +68,13 @@ class MyAdapter(val items: MutableList<Item>, private val onItemClick: (Int) -> 
                 if (position != RecyclerView.NO_POSITION) {
                     onItemClick(position)
                 }
+            }
+            itemView.setOnLongClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    onItemLongClick("$position Item Long Clicked!!")
+                }
+                return@setOnLongClickListener false
             }
         }
     }

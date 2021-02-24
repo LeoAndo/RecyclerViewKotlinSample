@@ -26,10 +26,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        adapter = MyAdapter(generateDummyItems(10).toMutableList()) { position ->
+        adapter = MyAdapter(generateDummyItems(10).toMutableList(), onItemClick = { position ->
             showToast("$position Item Clicked!!")
             adapter.updateItem(position)
-        }
+        }, onItemLongClick = this::showToast)
 
         val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
         recyclerView.also {
