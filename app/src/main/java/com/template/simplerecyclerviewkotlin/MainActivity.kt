@@ -51,16 +51,18 @@ class MainActivity : AppCompatActivity() {
     fun insertItem(view: View) {
         val until = if (adapter.items.size == 0) 1 else adapter.items.size
         val index = Random.nextInt(until)
-        val resIndex = Random.nextInt(resources.size)
-        val newItem = Item(
-            resources[resIndex].imageResource,
-            "insert: ${resources[resIndex].title}",
-            resources[resIndex].price,
-            resources[resIndex].amount
-        )
+        val randomItem = resources.random()
+        val newItem = randomItem.let {
+            Item(
+                it.imageResource,
+                "insert: ${it.title}",
+                it.price,
+                it.amount
+            )
+        }
         adapter.insertItem(index, newItem)
         displayTotalPrice()
-        Log.d("aaa", "title: ${resources[resIndex].title} : index: $index")
+        Log.d("aaa", "title: ${newItem.title} : index: $index")
     }
 
     fun removeItem(view: View) {
@@ -81,14 +83,16 @@ class MainActivity : AppCompatActivity() {
     private fun generateDummyItems(size: Int): List<Item> {
         val items: ArrayList<Item> = arrayListOf()
         for (i in 0 until size) {
-            val resIndex = Random.nextInt(resources.size)
+            val randomItem = resources.random()
             items.add(
-                Item(
-                    resources[resIndex].imageResource,
-                    resources[resIndex].title,
-                    resources[resIndex].price,
-                    resources[resIndex].amount
-                )
+                randomItem.let {
+                    Item(
+                        it.imageResource,
+                        it.title,
+                        it.price,
+                        it.amount
+                    )
+                }
             )
         }
         return items
