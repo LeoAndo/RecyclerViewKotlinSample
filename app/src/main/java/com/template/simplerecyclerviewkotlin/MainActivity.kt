@@ -15,10 +15,10 @@ import kotlin.random.Random
 class MainActivity : AppCompatActivity() {
     private val resources =
         listOf(
-            OrderItem(R.drawable.ic_emoji_food_beverage, "beverage", 1000, 1),
-            OrderItem(R.drawable.ic_cake, "cake", 1000, 3),
-            OrderItem(R.drawable.ic_fastfood, "fastFood", 1000, 5),
-            OrderItem(R.drawable.ic_food_bank, "foodBank", 1000, 10)
+            Item(R.drawable.ic_emoji_food_beverage, "beverage", 1000, 1),
+            Item(R.drawable.ic_cake, "cake", 1000, 3),
+            Item(R.drawable.ic_fastfood, "fastFood", 1000, 5),
+            Item(R.drawable.ic_food_bank, "foodBank", 1000, 10)
         )
     private lateinit var adapter: MyAdapter
 
